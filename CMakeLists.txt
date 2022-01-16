@@ -468,6 +468,8 @@ set (WRAPPER_INSTALL_DIR ${LIB_ARCH_INSTALL_DIR}/wrappers)
 
 include_directories (${CMAKE_CURRENT_SOURCE_DIR}/compat)
 
+find_package (PkgConfig)
+
 if (NOT WIN32 AND NOT ENABLE_STATIC_EXE)
 
     if (NOT ENABLE_STATIC_SNAPPY)
@@ -486,7 +488,6 @@ if (NOT WIN32 AND NOT ENABLE_STATIC_EXE)
         find_package (PNG)
     endif ()
 
-    find_package (PkgConfig)
     if (PKG_CONFIG_FOUND)
         pkg_check_modules (BROTLIDEC IMPORTED_TARGET libbrotlidec>=1.0.7)
         pkg_check_modules (BROTLIENC IMPORTED_TARGET libbrotlienc>=1.0.7)
@@ -494,6 +495,13 @@ if (NOT WIN32 AND NOT ENABLE_STATIC_EXE)
 
     find_package (GTest)
 endif ()
+
+
+if (PKG_CONFIG_FOUND)
+    pkg_check_modules (LIBDRM libdrm>=2.4.71)
+    pkg_check_modules (GBM gbm>=13.0)
+endif ()
+
 
 add_subdirectory (thirdparty)
 
