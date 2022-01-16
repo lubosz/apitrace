@@ -265,6 +265,7 @@ updateDrawable(int width, int height) {
     currentDrawable->show();
 
     // Ensure the drawable dimensions, as perceived by glstate match.
+    /*
     if (retrace::debug > 0) {
         GLint newWidth = 0;
         GLint newHeight = 0;
@@ -276,6 +277,7 @@ updateDrawable(int width, int height) {
                 << "got " << newWidth << "x" << newHeight << "\n";
         }
     }
+    */
 
     glScissor(0, 0, width, height);
 }
