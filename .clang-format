@@ -1,0 +1,10 @@
+BasedOnStyle: WebKit
+AlignAfterOpenBracket: Align
+AlwaysBreakAfterDefinitionReturnType: TopLevel
+BraceWrapping:
+  AfterClass: true
+BreakBeforeBinaryOperators: None
+BreakBeforeBraces: Custom
+BreakConstructorInitializers: AfterColon
+DerivePointerAlignment: true
+MaxEmptyLinesToKeep: 2

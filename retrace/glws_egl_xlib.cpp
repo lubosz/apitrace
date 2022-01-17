@@ -47,8 +47,7 @@ static bool has_EGL_KHR_create_context = false;
 
 
 static EGLenum
-translateAPI(glfeatures::Profile profile)
-{
+translateAPI(glfeatures::Profile profile) {
     switch (profile.api) {
     case glfeatures::API_GL:
         return EGL_OPENGL_API;
@@ -72,8 +71,7 @@ translateAPI(glfeatures::Profile profile)
  * - eglWaitNative
  */
 static void
-bindAPI(EGLenum api)
-{
+bindAPI(EGLenum api) {
     if (eglBindAPI(api) != EGL_TRUE) {
         std::cerr << "error: eglBindAPI failed\n";
         exit(1);
@@ -90,8 +88,7 @@ public:
     EglVisual(Profile prof) :
         Visual(prof),
         config(0),
-        visinfo(0)
-    {}
+        visinfo(0) { }
 
     ~EglVisual() {
         XFree(visinfo);
@@ -109,8 +106,7 @@ public:
     EglDrawable(const Visual *vis, int w, int h,
                 const glws::pbuffer_info *pbInfo) :
         Drawable(vis, w, h, pbInfo),
-        api(EGL_OPENGL_ES_API)
-    {
+        api(EGL_OPENGL_ES_API) {
         XVisualInfo *visinfo = static_cast<const EglVisual *>(visual)->visinfo;
 
         const char *name = "eglretrace";
@@ -228,8 +224,7 @@ public:
 
     EglContext(const Visual *vis, EGLContext ctx) :
         Context(vis),
-        context(ctx)
-    {}
+        context(ctx) { }
 
     ~EglContext() {
         eglDestroyContext(eglDisplay, context);
@@ -241,8 +236,7 @@ public:
  * that they can be later found by dlsym(RTLD_NEXT, ...);
  */
 static void
-load(const char *filename)
-{
+load(const char *filename) {
     if (!dlopen(filename, RTLD_GLOBAL | RTLD_LAZY)) {
         std::cerr << "error: unable to open " << filename << "\n";
         exit(1);
@@ -343,7 +337,7 @@ createVisual(bool doubleBuffer, unsigned samples, Profile profile) {
     }
 
     std::vector<EGLConfig> configs(num_configs);
-    if (!eglChooseConfig(eglDisplay, attribs, &configs[0], num_configs,  &num_configs) ||
+    if (!eglChooseConfig(eglDisplay, attribs, &configs[0], num_configs, &num_configs) ||
         num_configs <= 0) {
         return NULL;
     }
@@ -386,7 +380,7 @@ createVisual(bool doubleBuffer, unsigned samples, Profile profile) {
     EglVisual *visual = new EglVisual(profile);
     visual->config = config;
 
-    XVisualInfo* visinfo;
+    XVisualInfo *visinfo;
     XVisualInfo templ;
     int num_visuals = 0;
     templ.visualid = visual_id;
@@ -409,15 +403,13 @@ createVisual(bool doubleBuffer, unsigned samples, Profile profile) {
 
 Drawable *
 createDrawable(const Visual *visual, int width, int height,
-               const glws::pbuffer_info *pbInfo)
-{
+               const glws::pbuffer_info *pbInfo) {
     return new EglDrawable(visual, width, height, pbInfo);
 }
 
 
 Context *
-createContext(const Visual *_visual, Context *shareContext, bool debug)
-{
+createContext(const Visual *_visual, Context *shareContext, bool debug) {
     Profile profile = _visual->profile;
     const EglVisual *visual = static_cast<const EglVisual *>(_visual);
     EGLContext share_context = EGL_NO_CONTEXT;
@@ -425,7 +417,7 @@ createContext(const Visual *_visual, Context *shareContext, bool debug)
     Attributes<EGLint> attribs;
 
     if (shareContext) {
-        share_context = static_cast<EglContext*>(shareContext)->context;
+        share_context = static_cast<EglContext *>(shareContext)->context;
     }
 
     int contextFlags = 0;
@@ -487,8 +479,7 @@ createContext(const Visual *_visual, Context *shareContext, bool debug)
 }
 
 bool
-makeCurrentInternal(Drawable *drawable, Drawable *readable, Context *context)
-{
+makeCurrentInternal(Drawable *drawable, Drawable *readable, Context *context) {
     if (!drawable || !context) {
         return eglMakeCurrent(eglDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
     } else {
